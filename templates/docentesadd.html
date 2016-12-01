@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+{% load addform %}
+{% block title %}Docentes - agregar{% endblock %}
+{% block css %}
+<link href="/media/css/multi-select.css" media="screen" rel="stylesheet" type="text/css">
+<style type="text/css">
+    #ms-id_categorias {
+        width: 100%;
+    }
+    .search-input {
+        width: 100%;
+    }
+</style>
+{% endblock %}
+{% block js %}
+<script src="/media/js/jquery.multi-select.js" type="text/javascript"></script>
+<script src="/media/js/jquery.quicksearch.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $('#id_categorias').multiSelect({
+        selectableHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='Grupos'>",
+        selectionHeader: "<input type='text' class='search-input' autocomplete='off' placeholder='Mis grupos'>",
+        afterInit: function(ms){
+            var that = this,
+            $selectableSearch = that.$selectableUl.prev(),
+            $selectionSearch = that.$selectionUl.prev(),
+            selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+            selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+
+            that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+            .on('keydown', function(e){
+              if (e.which === 40){
+                that.$selectableUl.focus();
+                return false;
+            }
+        });
+
+            that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+            .on('keydown', function(e){
+              if (e.which == 40){
+                that.$selectionUl.focus();
+                return false;
+            }
+        });
+        },
+        afterSelect: function(){
+            this.qs1.cache();
+            this.qs2.cache();
+        },
+        afterDeselect: function(){
+            this.qs1.cache();
+            this.qs2.cache();
+        }
+    });
+    $(document).ready(function() {
+        var src = $("#id_foto").parent().find("a").attr("href");
+        $("#id_foto").parent().find("a").remove();
+        if(src != undefined){
+            $("#id_foto").parent().prepend("<img src='/"+src+"' width=140 />");
+        }
+
+
+        if ($('input#id_is_active').prop('checked')) {
+             $('.span_title').text('Activo');
+        }else{
+              $('.span_title').text('Desactivado');
+        }
+
+
+            $("#id_username").change(function(){
+               // alert($("#id_username").val());
+                $('#id_email').val($(this).val());
+        });
+
+
+         $('input#id_is_active').change(function() {
+                if ($('input#id_is_active').prop('checked')) {
+                        $('.span_title').text('Activo');
+                }else{
+                      $('.span_title').text('Desactivado');
+                }
+        });
+
+    });
+
+
+</script>
+{% endblock %}
+{% block content %}
+<section>
+    <div class="section-body contain-lg">
+
+        <div class="row">
+            <form action="." method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="col-lg-8 col-centered">
+
+
+                {% if modo != "edit" %}
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form">
+                            <div class="text-center">
+                                <h2>Cuenta del docente</h2>
+                            </div>
+
+                            <div class="form-group">
+                                <span class="input-group-addon"><i class="fa fa-at" aria-hidden="true"></i>
+                                </span>
+                                <div class="input-group-content">
+                                    {{ ucform.username|add:'class="form-control" id="username9"' }}
+                                    <label for="username9">Email (Éste será el usuario con el que iniciará sesión)</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <span class="input-group-addon"><i class="fa fa-unlock-alt" aria-hidden="true"></i>
+                                </span>
+                                <div class="input-group-content">
+                                    {{ ucform.password }}
+
+                                    {{ ucform.password1|add:'class="form-control" id="username9"' }}
+                                    <label for="username9">Contraseña</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <span class="input-group-addon"><i class="fa fa-unlock-alt" aria-hidden="true"></i>
+                                </span>
+                                <div class="input-group-content">
+                                    {{ ucform.password2|add:'class="form-control" id="username9"' }}
+                                    <label for="username9">Repite contraseña</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+
+
+
+                <div class="card">
+                     <div class="card-head style-primary-light">
+                            <header>Información del docente <small> Detalles de grupos asignados</small>
+
+                            </header>
+                   </div>
+                    <div class="card-body">
+                        <div class="form">
+
+                            {{ ucform.errors }}
+                            {{ pform.errors }}
+
+                            <div class="form-group col-sm-2 style-primary-light">
+                              <div class="checkbox checkbox-styled">
+														<label>
+															 {{ ucform.is_active  }}
+															<span class="span_title"></span>
+														</label>
+													</div>
+                            </div>
+                            <div class="form-group col-sm-5">
+
+                                <span class="input-group-addon"><span class="glyphicon  fa-lg"><i class="fa fa-child" aria-hidden="true"></i>
+                                    </span></span>
+                                <div class="input-group-content">
+                                    {{ ucform.first_name|add:'class="form-control" id="username9"' }}
+                                    <label for="username9">Nombres</label>
+
+                                </div>
+
+                            </div>
+                            <div class="form-group col-sm-5">
+
+                                <span class="input-group-addon"><span class="glyphicon  fa-lg"><i class="fa fa-child" aria-hidden="true"></i>
+                                    </span></span>
+                                <div class="input-group-content">
+                                    {{ ucform.last_name|add:'class="form-control" id="username9"' }}
+                                    <label for="username9">Apellidos</label>
+                                </div>
+
+                            </div>
+            {% comment %} <div class="form-group">
+                                <span class="input-group-addon"><span class="glyphicon  fa-lg"><i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                                </span></span>
+                                <div class="input-group-content">
+                                    {{ ucform.email|add:'class="form-control" id="username9"' }}
+                                    <label for="username9">Correo</label>
+                                </div>
+                            </div>% endcomment %}
+                            {{ ucform.email.as_hidden|add:'class="form-control" id="username9"' }}
+                            <div class="form-group">
+                                <span class="input-group-addon"><span class="glyphicon  fa-lg"><i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                                </span></span>
+                                <div class="input-group-content">
+                                    {{ pform.foto }}
+                                    <label for="username9">Foto</label>
+                                </div>
+                            </div>
+                
+                            <div class="form-group">
+
+                                <span class="input-group-addon"><span class="glyphicon  fa-lg"><i class="fa fa-phone" aria-hidden="true"></i>
+                                    </span></span>
+                                <div class="input-group-content">
+                                    {{ pform.telefono|add:'class="form-control" id="username9"' }}
+                                    <label for="username9">Telefono</label>
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+
+                                <span class="input-group-addon"><span class="glyphicon  fa-lg"></span><i class="fa fa-building" aria-hidden="true"></i>
+                                    </span>
+                                <div class="input-group-content">
+                                    {{ pform.direccion|add:'class="form-control" id="username9"' }}
+                                    <label for="username9">Dirección</label>
+                                </div>
+
+                            </div>
+             
+                        </div>
+                    </div>
+                </div>
+
+                               <div class="card">
+                    <div class="card-body">
+                        <div class="text-center">
+                            <h2>Grupos</h2>
+                        </div>
+                        <div class="form">
+                            {{ dcform.categorias }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class=" text-right">
+                    <button class="btn btn-primary btn-raised" type="submit">Guardar docente</button>
+                </div>
+            </div>
+
+            
+        </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

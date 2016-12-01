@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}Notificaciones{% endblock %}
+{% block content %}
+<section>
+    <div class="section-body contain-lg">
+
+        <div class="row">
+            <div class="col-lg-8 col-centered">
+                <div class="card">
+                    <div class="card-body">
+                        <form class="form">
+                             <section class="style-default-bright">
+                                <div class="section-body">
+                                    <div class="text-center">
+                                        <h2>Notificaciones</h2>
+                                    </div>
+
+                                    <div class="text-right">
+                                        <a href="{% url 'notiSendView' %}">
+                                            <button class="btn btn-primary btn-raised" type="button">Agregar Notificación</button>
+                                        </a>
+                                    </div>
+                                </div>
+                             </section>
+                        </form>
+
+
+                        {% include "partials/notifylist.html" %}
+
+
+
+                    </div>
+                </div>
+
+
+
+
+               {% comment %} <div class="card">
+                    <div class="card-body no-padding">
+                         <ul class="list">
+                {% for n in ns %}
+
+                                            <li class="tile">
+                                                <a class="tile-content ink-reaction">
+                                                    <div class="tile-text">{{ n.contenido }}</div>
+                                                </a>
+                                            </li>
+                                           
+
+                {% endfor %}
+
+                        </ul>               
+                    </div><!--end .card-body -->
+                </div><!--end .card -->{% endcomment %}
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+{% endblock%}
+{% block js %}
+<script type="text/javascript">
+    // using jQuery
+jQuery(function(){
+    $(".delnoti").click(function() {
+        if(confirm("Deseas borrar esta notificación")) {
+        $.ajax({
+              url: "{% url 'notifyDeleteApi' %}",
+              method: "POST",
+              data: { idd :  $(this).attr("data-value") },
+              dataType: "json"
+        }).done(function(result) {
+            if(result.status == "OK") {
+                alert("Notificacion Borrada con exito");
+                location.reload();
+            } else {
+                alert("Se encontraron errores al procesar");
+            }
+        });
+	}
+    });
+
+});
+
+
+
+</script>
+{% endblock %}

@@ -1,0 +1,23 @@
+
+    <div class="card">
+                 <div class="card-head style-primary-light">
+                            <header>Alumnos asociados al representante <small>Alumnos, Hijos, representados</small></header>
+                 </div>
+                    <div class="card-body">
+
+                        <div class="form">
+                            {{ formset.management_form }}
+                            {% for form in formset %}
+                                <div class="table">
+                                    {{ form }}
+                                </div>
+                            {% endfor %}
+                            <div class=" text-right">
+                                <button id="remove_estu" class="btn btn-danger btn-raised" type="button">Eliminar formulario</button>
+                                <button id="add_estu" class="btn btn-primary-light btn-raised" type="button   ">Agregar alumno</button>
+                                <button class="btn btn-primary btn-raised" type="submit">Guardar Todo</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    </div>

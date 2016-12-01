@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block title %}Usuarios{% endblock %}
+{% block js %}
+<script type="text/javascript">
+    // using jQuery
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+    $(".duser").click(function() {
+        if(confirm("Deseas borrar este usuario")) {
+        $.ajax({
+              url: "{% url 'userDeleteApi' %}",
+              method: "POST",
+              data: { user :  $(this).attr("data-value") },
+              dataType: "json"
+        }).done(function(result) {
+            if(result.status == "OK") {
+                alert("Usuario Borrado con exito");
+                location.reload();
+            } else {
+                alert("Se encontraron errores al procesar");
+            }
+        });
+	}
+    });    
+</script>
+{% endblock %}
+{% block content %}
+    <section>
+        <div class="section-body contain-lg">
+
+            <div class="row">
+                <div class="col-lg-8 col-centered">
+                    <div class="card">
+                        <div class="card-body">
+                            <form class="form">
+                                <section class="style-default-bright">
+
+                                    <div class="section-body">
+
+                                        <div class="section-header text-center">
+                                            <h2 class="text-primary">Docentes Registrados</h2>
+                                        </div>
+                                        <div class=" text-right">
+                                            <a href="{% url 'docentesAddView' %}" target="_self"><button class="btn btn-primary btn-raised" type="button">Agregar Docente</button></a>
+                                        </div>
+
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4>Example 1: Show/hide columns</h4>
+                                            </div><!--end .col -->
+                                            <div class="col-lg-12">
+                                                <div class="table-responsive">
+                                                    <table id="datatable1" class="table table-striped table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Nombres</th>
+                                                                <th>Apellidos</th>
+                                                                <th>Telefono</th>
+                                                                <th class="sort-alpha ">Opciones</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for d in ds %}
+                                                            <tr class="gradeX">
+                                                                <td>{{ d.user.first_name }}</td>
+                                                                <td>{{ d.user.last_name }}</td>
+                                                                <td>{{ d.user.profile.telefono }}</td>
+                                                                <td>
+                                                                    <a href="{% url 'docentesEditView' doce=d.id %}">
+                                                                        <button  class="btn btn-primary btn-raised boton_tabla" type="button"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                                                    </a>
+
+								                                    <a href="{% url 'cambiarclave' user=d.user.id rol='docentes' %}">
+                                                                        <button type="button" class="btn btn-warning btn-raised boton_tabla"><i class="fa fa-key" aria-hidden="true"></i></button>
+                                                                    </a>
+
+                                                                    <a class="duser" data-value="{{ p.user.id}}">
+                                                                        <button type="button" class="btn btn-danger btn-raised boton_tabla" ><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+{% endblock %}

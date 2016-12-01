@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% load addform %}
+{% block title %}Contenido - agregar{% endblock %}
+{% block css %}
+<style type="text/css">
+    .dz-image > img {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+
+    {% if modo == "edit" %}
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+    var myDropzone = new Dropzone("div#mydropzone",
+    {
+        url: "{% url 'conteimages' %}",
+        addRemoveLinks: true,
+        paramName: "imagen", // Nombre para el campo
+        maxFilesize: 2, // MB
+        headers: {
+            'X-CSRFToken': csrftoken,
+        },
+        init: function() {
+            {% for img in cs.galeria_set.all %}
+                var mockFile = { name: "{{ img.imagen }}", size: {{ img.imagen.size }}, galeria_id: {{ img.id }} };
+                this.emit("addedfile", mockFile);
+                this.emit("thumbnail", mockFile, "/{{ img.imagen }}");
+            {% endfor %}
+
+            this.on("success", function(file, response) {
+                file.galeria_id = response.result.id;
+            });
+
+            this.on("error", function(event, result, done) {
+                if(result.status == "ERRORS") {
+                    alert("Se encontraron errores al procesar");
+                }
+            });
+
+            this.on('sending', function(data, xhr, formData){
+                formData.append('contenido', {{ cs.id }});
+            });
+        },
+        removedfile: function(file) {
+            $.ajax({
+              url: "{% url 'conteimagesBorrar' %}",
+              method: "POST",
+              data: { id : file.galeria_id },
+              dataType: "json"
+            }).done(function(result){
+                if(result.status=="OK"){
+                    alert("Imagen eliminada con exito");
+                } else {
+                    alert("Se encontraron errores al procesar");
+                }
+            });
+            var _ref;
+            return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+        }
+    });
+    {% else %}
+        $("#mydropzone").click(function() {
+            alert("Primero debes guardar");
+        });
+    {% endif %}
+</script>
+{% endblock %}
+{% block content %}
+<section>
+    <div class="section-body contain-lg">
+
+        <div class="row">
+            <div class="col-lg-2"></div>
+            <div class="col-lg-8">
+
+                <div class="card">
+
+                    <div class="card-body">
+                        <div class="text-center">
+                            <h1>Detalle del Contenido<br></h1>
+                        </div>
+                        <form action="." class="form" method="post">
+                            {% csrf_token %}
+                            {{ cform.errors }}
+                            <div class="form-group floating-label">
+                                {{ cform.titulo|add:'class="form-control" id="placeholder2"' }}
+                                <label for="placeholder2">Titulo</label>
+                            </div>
+
+                            <div class="form-group">
+                                {{ cform.contenido|add:'name="textarea1" id="textarea1" class="form-control" rows="3" placeholder=""' }}
+                                <label for="textarea1">Contenido</label>
+                            </div>
+                            <div class=" text-right">
+                                <button class="btn btn-primary btn-raised" type="submit">Guardar</button>
+                            </div>
+                        </form>
+
+                        <div class="row">
+                            <div class="col-lg-12 ">
+                                <label >Galería de imágenes</label><br><br>
+                                <span><strong>*Las imágenes deben tener un tamaño máximo de 2MB</strong></span>
+                            </div><!--end .col -->
+
+                            <div class="col-lg-offset-1 col-lg-10">
+                                <div class="card">
+                                    <div class="card-head style-primary">
+                                        <header>Arrastre las imágenes para la galería</header>
+                                    </div>
+                                    <div class="card-body no-padding">
+                                        <div id="mydropzone" class="dropzone">
+                                            <div class="dz-message">
+                                                <h3>Arrastra Las Imagenes Para La Galeria</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if modo == "edit" %}
+                            <a href="{% url 'cateConteVerView' idcate=cs.grupo_id %}">
+                                <button class="btn btn-success btn-raised" type="button">Terminar</button>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="col-lg-2"></div>
+        </div>
+    </div>
+</section>
+{% endblock %}

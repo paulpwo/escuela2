@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>{% block title %}{% endblock %}</title>
+
+    <!-- BEGIN META -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="your,keywords">
+    <meta name="description" content="Short explanation about this website">
+    <!-- END META -->
+
+    <!-- BEGIN STYLESHEETS -->
+    <link href='http://fonts.googleapis.com/css?family=Roboto:300italic,400italic,300,400,500,700,900' rel='stylesheet' type='text/css'/>
+    <link type="text/css" rel="stylesheet" href="/media/assets/css/theme-default/bootstrap.css" />
+    <link type="text/css" rel="stylesheet" href="/media/assets/css/theme-default/materialadmin.css" />
+    <link type="text/css" rel="stylesheet" href="/media/assets/css/theme-default/font-awesome.min.css?1422529194" />
+    <link type="text/css" rel="stylesheet" href="/media/assets/css/theme-default/material-design-iconic-font.min.css" />
+    <link type="text/css" rel="stylesheet" href="/media/assets/css/theme-default/libs/dropzone/dropzone-theme.css" />
+    <link type="text/css" rel="stylesheet" href="/media/assets/css/theme-default/libs/DataTables/jquery.dataTables.css?1423553989" />
+    <link type="text/css" rel="stylesheet" href="/media/assets/css/theme-default/libs/DataTables/extensions/dataTables.colVis.css?1423553990" />
+    <link type="text/css" rel="stylesheet" href="/media/assets/css/theme-default/libs/DataTables/extensions/dataTables.tableTools.css?1423553990" />
+    {% block css %}
+    {% endblock %}
+    <!-- END STYLESHEETS -->
+    <!-- END STYLESHEETS -->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/media/assets/js/libs/utils/html5shiv.js?1403934957"></script>
+    <script type="text/javascript" src="/media/assets/js/libs/utils/respond.min.js?1403934956"></script>
+    <![endif]-->
+</head>
+<body class="menubar-hoverable header-fixed ">
+
+    <!-- BEGIN HEADER-->
+    <header id="header" >
+        <div class="headerbar">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="headerbar-left">
+                <ul class="header-nav header-nav-options">
+                    <li class="header-nav-brand" >
+                        <div class="brand-holder">
+                            <a href="../../html/dashboards/dashboard.html">
+                                <span class="text-lg text-bold text-primary">COLEGIOS APP</span>
+                            </a>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="btn btn-icon-toggle menubar-toggle" data-toggle="menubar" href="javascript:void(0);">
+                            <i class="fa fa-bars"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="headerbar-right">
+                <ul class="header-nav header-nav-profile">
+                    <li class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle ink-reaction" data-toggle="dropdown">
+                            <img src="/media/img/homeic_launcher.png?1403934956" alt="" />
+                            <span class="profile-info">
+                                {{ user.get_full_name }}
+                                <small>{{ user.profile.get_rol_display }}</small>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu animation-dock">
+							{% if user.profile.rol == 1 %}
+                            <li class="dropdown-header">Configuracion</li>
+                            <li><a href="{% url 'institucionalView' %}">Mi perfil</a></li>
+                            <li class="divider"></li>
+                            {% endif %}
+                            <li><a href="{% url 'logout_view' %}"><i class="fa fa-fw fa-power-off text-danger"></i>Salir</a></li>
+                        </ul><!--end .dropdown-menu -->
+                    </li><!--end .dropdown -->
+                </ul><!--end .header-nav-profile -->
+               
+            </div><!--end #header-navbar-collapse -->
+        </div>
+    </header>
+    <!-- END HEADER-->
+
+    <!-- BEGIN BASE-->
+    <div id="base">
+        <div class="offcanvas"></div>
+        <div id="content">
+            {% block content %}
+            {% endblock %}
+
+    </div>
+    <!-- END CONTENT -->
+
+    <!-- BEGIN MENUBAR-->
+    <div id="menubar" class="menubar-inverse ">
+        <div class="menubar-fixed-panel">
+            <div>
+                <a class="btn btn-icon-toggle btn-default menubar-toggle" data-toggle="menubar" href="javascript:void(0);">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+            <div class="expanded">
+                <a href="../../html/dashboards/dashboard.html">
+                    <span class="text-lg text-bold text-primary ">MATERIAL&nbsp;ADMIN</span>
+                </a>
+            </div>
+        </div>
+        <div class="menubar-scroll-panel">
+
+            <!-- BEGIN MAIN MENU -->
+            <ul id="main-menu" class="gui-controls">
+
+                <!-- BEGIN DASHBOARD -->
+                <li>
+                    <a href="{% url 'notiverView' %}" >
+                        <div class="gui-icon"><i class="fa fa-comment-o" aria-hidden="true"></i>
+
+                        </div>
+                        <span class="title">Notificaciones</span>
+                    </a>
+                </li><!--end /menu-li -->
+                {% if user.profile.rol == 1 %}
+                <li>
+                    <a href="{% url 'usuariosVerView' %}" >
+                        <div class="gui-icon"><i class="fa fa-user" aria-hidden="true"></i></div>
+                        <span class="title">Padres y Alumnos</span>
+                    </a>
+                </li><!--end /menu-li -->
+                <li>
+                    <a href="{% url 'docentesVerView' %}" >
+                        <div class="gui-icon"><i class="fa fa-user" aria-hidden="true"></i></div>
+                        <span class="title">Docentes</span>
+                    </a>
+                </li><!--end /menu-li -->
+                {% endif %}
+                
+                <li>
+                    <a href="{% url 'categoriaVerView' %}" >
+                        <div class="gui-icon"><i class="fa fa-users" aria-hidden="true"></i>
+                        </div>
+                        <span class="title">Grupos</span>
+                    </a>
+                </li><!--end /menu-li -->
+
+                <!--
+                <li>
+                    <a href="asignar-grupo.php" >
+                        <div class="gui-icon"><i class="fa fa-sitemap" aria-hidden="true"></i>
+                        </div>
+                        <span class="title">Asignar Grupo</span>
+                    </a>
+                </li>
+                -->
+                {% if user.profile.rol == 1 %}
+                <li>
+                    <a href="{% url 'institucionalView' %}" >
+                        <div class="gui-icon"><i class="fa fa-cog" aria-hidden="true"></i>
+                        </div>
+                        <span class="title">Configuración</span>
+                    </a>
+                </li><!--end /menu-li -->
+                {% endif %}
+                
+                <li>
+                    <a href="{% url 'logout_view' %}" >
+                        <div class="gui-icon"><i class="fa fa-power-off" aria-hidden="true"></i>
+                        </div>
+                        <span class="title">Salir</span>
+                    </a>
+                </li><!--end /menu-li -->
+
+            </ul><!--end .main-menu -->
+            <!-- END MAIN MENU -->
+
+            <div class="menubar-foot-panel text-center">
+                <small class="no-linebreak hidden-folded">
+                    
+                    <div class="text-center">
+                        <!--<img src="baumsoft.png">-->
+                    </div>
+                </small>
+            </div>
+            
+        </div><!--end .menubar-scroll-panel-->
+    </div><!--end #menubar-->
+    <!-- END MENUBAR -->
+
+
+<!-- END BASE -->
+
+<!-- BEGIN JAVASCRIPT -->
+<script src="/media/assets/js/libs/jquery/jquery-1.11.2.min.js"></script>
+<script src="/media/assets/js/libs/jquery/jquery-migrate-1.2.1.min.js"></script>
+<script src="/media/assets/js/libs/main.js"></script>
+<script src="/media/assets/js/libs/bootstrap/bootstrap.min.js"></script>
+<script src="/media/assets/js/libs/spin.js/spin.min.js"></script>
+<script src="/media/assets/js/libs/autosize/jquery.autosize.min.js"></script>
+<script src="/media/assets/js/libs/nanoscroller/jquery.nanoscroller.min.js"></script>
+<script src="/media/assets/js/core/source/App.js"></script>
+<script src="/media/assets/js/core/source/AppNavigation.js"></script>
+<script src="/media/assets/js/core/source/AppOffcanvas.js"></script>
+<script src="/media/assets/js/core/source/AppCard.js"></script>
+<script src="/media/assets/js/core/source/AppForm.js"></script>
+<script src="/media/assets/js/core/source/AppNavSearch.js"></script>
+<script src="/media/assets/js/core/source/AppVendor.js"></script>
+<script src="/media/assets/js/libs/dropzone/dropzone.min.js"></script>
+<script src="/media/assets/js/core/demo/Demo.js"></script>
+
+<script src="/media/assets/js/libs/DataTables/jquery.dataTables.min.js"></script>
+<script src="/media/assets/js/libs/DataTables/extensions/ColVis/js/dataTables.colVis.min.js"></script>
+<script src="/media/assets/js/libs/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+<script src="/media/assets/js/core/demo/DemoTableDynamic.js"></script>
+
+
+<!-- END JAVASCRIPT -->
+{% block js %}{% endblock %}
+<script>
+    var myDropzone = new Dropzone("form#myId", { url: "/file/post"});
+</script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load addform %}
+{% block title %}Categorias - Agregar{% endblock %}
+{% block js %}
+<script type="text/javascript">
+    // using jQuery
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+    $("#eliminar").click(function() {
+        if(confirm("Deseas eliminar esta categoria")) {
+            $.ajax({
+                url: "{% url 'categoriaBorrar' %}",
+                method: "POST",
+                data: { cate : $(this).attr("data-value") },
+                dataType: "json"
+            }).done(function(result) {
+                if(result.status == "OK") {
+                    alert("Categoria Borrrada con exito");
+                    location.href="{% url 'categoriaVerView' %}";
+                }
+            });
+        }
+    });
+
+</script>
+{% endblock %}
+{% block content %}
+<section>
+    <div class="section-body contain-lg">
+
+        <div class="row">
+            <div class="col-lg-6 col-centered">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="." class="form" method="post">
+                            {% csrf_token %}
+                            <div class="text-center">
+                                <h2>{% if modo == "edit" %} Editar {% else %} Agregar {% endif %}Grupo</h2>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-group">
+                                    {{ cform.tipo|add:'class="form-control" id="placeholder1" placeholder="Categoria Nueva"' }}
+                                </div>
+                                <div class="form-group">
+                                    {{ cform.categoria|add:'class="form-control" id="placeholder1" placeholder="Grupo nuevo"' }}
+                                </div>
+                            </div>
+                            <div >
+                                <div class="col-md-6">
+                                    <button class="btn btn-primary btn-raised" type="submit">Guardar</button>
+                                    {% if modo == "edit" %}
+                                    <button id="eliminar" data-value="{{ cate }}" class="btn btn-danger btn-raised" type="button">Eliminar</button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

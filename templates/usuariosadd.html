@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load addform %}
+{% block title %}Usuarios - agregar{% endblock %}
+{% block css %}
+<style type="text/css">
+    .table:hover {
+        background: rgb(250, 250, 250);
+    }
+</style>
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+    function cloneMore(selector, type) {
+        var newElement = $(selector).clone(true);
+
+        var total = $('#id_' + type + '-TOTAL_FORMS').val();
+
+        newElement.find(':input').each(function() {
+            var name = $(this).attr('name').replace('-' + (total-1) + '-','-' + total + '-');
+            var id = 'id_' + name;
+            $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+        });
+        newElement.find('label').each(function() {
+            var newFor = $(this).attr('for').replace('-' + (total-1) + '-','-' + total + '-');
+            $(this).attr('for', newFor);
+        });
+        total++;
+        $('#id_' + type + '-TOTAL_FORMS').val(total);
+        $(selector).after(newElement);
+    }
+    $('#add_estu').click(function(event) {
+        event.preventDefault();
+        cloneMore('div.table:last', 'form');
+    });
+    $("#remove_estu").click(function(event) {
+        event.preventDefault();
+        if(confirm("Deseas eliminar este formulario")) {
+            $("div.table:last").remove();
+            $('#id_form-TOTAL_FORMS').val($('#id_form-TOTAL_FORMS').val()-1);
+        }
+    });
+    $("#id_username").change(function(){
+           // alert($("#id_username").val());
+            $('#id_email').val($(this).val());
+	});
+
+
+
+        if ($('input#id_is_active').prop('checked')) {
+             $('.span_title').text('Activo');
+        }else{
+              $('.span_title').text('Desactivado');
+        }
+
+         $('input#id_is_active').change(function() {
+                if ($('input#id_is_active').prop('checked')) {
+                        $('.span_title').text('Activo');
+                }else{
+                      $('.span_title').text('Desactivado');
+                }
+        });
+
+
+</script>
+{% endblock %}
+{% block content %}
+<section>
+    <div class="section-body contain-lg">
+
+        <div class="row">
+            <form action="." method="post">
+            {% csrf_token %}
+{#            <div class="col-lg-12">#}
+
+
+
+                {% if modo != "edit" %}
+
+                        <div class="col-lg-8 col-centered">
+                            {%  include "partials/usuariologinform.html" %}
+                        </div>
+
+
+                {% endif %}
+
+                <div class="col-lg-8 col-centered">
+                        {%  include "partials/usuarioprofileform.html" %}
+                </div>
+
+
+
+                <div class="col-lg-8 col-centered">
+                    {% include "partials/alumnosform.html" %}
+                    <div class="col-lg-2"></div>
+
+{#            </div>#}
+           
+            </form>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

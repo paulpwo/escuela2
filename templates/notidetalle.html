@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Notificaciones -  Detalle {% endblock %}
+{% block content %}
+<section>
+    <div class="section-body contain-lg">
+
+        <div class="row">
+            <div class="col-lg-8 col-centered">
+<div class="card">
+    <form class="form">
+
+			<div class="card-head style-primary">
+				<header>Detalle de Notificación</header>
+			</div>
+			<div class="card-body">
+				<br/>
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group">
+							<input type="text" class="form-control" id="fechayhora" 
+							value="{{  ns.fechayhora }}" readonly>
+							<label for="Firstname1">Fecha</label>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group">
+							<input type="text" class="form-control" id="grupo" 
+							value="{{  ns.categoria }}" readonly>
+							<label for="Lastname1">Grupo</label>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<input type="text" rows="4" class="form-control" id="texto" 
+					value="{{  ns.contenido }}"
+					 readonly>
+					<label for="Username1">Contenido</label>
+				</div>
+
+			</div><!--end .card-body -->
+
+
+
+
+	</form>
+
+            <div class="card-actionbar">
+                <div class="card-actionbar-row col-lg-10 col-md-9 col-sm-9 col-xs-6">
+                    <a class="delnoti" data-value="{{ ns.id}}">
+                        <button type="button" class="btn   btn-danger ink-reaction" >
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        Borrar
+                        </button>
+                    </a>
+			    </div>
+                <div class="card-actionbar-row col-lg-2 col-md-3 col-sm-3 col-xs-6">
+                    <a href="{% url 'notiverView'%}">
+					    <button type="submit" class="btn     btn-primary ink-reaction">
+                            <i class="fa fa-arrow-left" aria-hidden="true"></i> Regresar</button>
+                    </a>
+				</div>
+			</div>
+    <br>
+
+
+    </div><!--end .card -->
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+{% endblock%}
+{% block js %}
+<script type="text/javascript">
+    // using jQuery
+jQuery(function(){
+    $(".delnoti").click(function() {
+        if(confirm("Deseas borrar esta notificación")) {
+        $.ajax({
+              url: "{% url 'notifyDeleteApi' %}",
+              method: "POST",
+              data: { idd :  $(this).attr("data-value") },
+              dataType: "json"
+        }).done(function(result) {
+            if(result.status == "OK") {
+                alert("Notificacion Borrada con exito");
+                window.location = '{% url 'notiverView' %}'
+            } else {
+                alert("Se encontraron errores al procesar");
+            }
+        });
+	}
+    });
+
+});
+
+
+
+</script>
+{% endblock %}

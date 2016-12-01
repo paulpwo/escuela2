@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% load addform %}
+{% block title %}Institucional{% endblock %}
+{% block content %}
+<section>
+    <div class="section-body contain-lg">
+
+        <div class="row">
+            <div class="col-lg-8 col-centered">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="{% url 'institucionalView' %}" class="form" method="post">
+                            <div class="text-center">
+                                <h2>Datos Institucionales</h2>
+                            </div>
+                            {% csrf_token %}
+                            {{ nform.errors }}
+                            <div class="form-group">
+
+                                <span class="input-group-addon"><span class="glyphicon  fa-lg"><i class="fa fa-university" aria-hidden="true"></i>
+                                    </span></span>
+                                <div class="input-group-content">
+                                    {{ nform.colegio|add:'class="form-control" id="username9"' }}
+                                    <label for="username9">Nombre Del Colegio</label>
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+
+                                <span class="input-group-addon"><span class="glyphicon  fa-lg"><i class="fa fa-location-arrow" aria-hidden="true"></i>
+                                    </span></span>
+                                <div class="input-group-content">
+                                    {{ nform.direccion|add:'class="form-control" id="username9"' }}
+                                    <label for="username9">Dirreción Del Colegio</label>
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+
+                                <span class="input-group-addon"><span class="glyphicon  fa-lg"><i class="fa fa-phone" aria-hidden="true"></i>
+                                    </span></span>
+                                <div class="input-group-content">
+                                    {{ nform.telefono|add:'class="form-control" id="username9"' }}
+                                    <label for="username9">Telefono Del Colegio</label>
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+
+                                <span class="input-group-addon"><span class="glyphicon  fa-lg"><i class="fa fa-clock-o" aria-hidden="true"></i>
+                                    </span></span>
+                                <div class="input-group-content">
+                                    {{ nform.horarios|add:'class="form-control" id="username9"' }}
+                                    <label for="username9">Información - Misión - Visión</label>
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+
+                                <span class="input-group-addon"><span class="glyphicon  fa-lg"></span><i class="fa fa-building" aria-hidden="true"></i>
+                                    </span>
+                                <div class="input-group-content">
+                                    {{ nform.ciudad|add:'class="form-control" id="username9"' }}
+                                    <label for="username9">Ciudad</label>
+                                </div>
+
+                            </div>  
+                            <div class="form-group">
+
+                                <span class="input-group-addon"><span class="glyphiconfa-lg"></span><i class="fa fa-envelope-o" aria-hidden="true"></i>
+                                </span>
+                                <div class="input-group-content">
+                                    {{ nform.email|add:'class="form-control" id="username9"' }}
+                                    <label for="username9">Email Del Colegio</label>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <span class="input-group-addon"><span class="glyphicon  fa-lg"><i class="fa fa-facebook" aria-hidden="true"></i>
+                                    </span></span>
+                                <div class="input-group-content">
+                                    {{ nform.facebook|add:'class="form-control" id="username9"' }}
+                                    <label for="username9">Facebook</label>
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+
+                                <span class="input-group-addon"><span class="glyphicon  fa-lg"><i class="fa fa-twitter" aria-hidden="true"></i>
+                                    </span></span>
+                                <div class="input-group-content">
+                                    {{ nform.twitter|add:'class="form-control" id="username9"' }}
+                                    <label for="username9">Twitter</label>
+                                </div>
+
+                            </div>
+
+
+                            <div class=" text-right">
+                                <button class="btn btn-primary btn-raised" type="submit">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

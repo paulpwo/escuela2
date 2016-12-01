@@ -1,0 +1,43 @@
+{% load addform %}
+
+
+            <div class="form">
+                <div class="card">
+                            {{ ucform.errors }}
+                            {{ pform.errors }}
+
+                        <div class="card-head ">
+                            <header>Datos para Iniciar sesión  | Padre - Representante <small> usada por los padres desde la App</small></header>
+                        </div>
+                         <div class="card-body">
+
+                            <div class="form-group">
+                                <span class="input-group-addon"><i class="fa fa-at" aria-hidden="true"></i>
+                                </span>
+                                <div class="input-group-content">
+                                    {{ ucform.username|add:'class="form-control" id="username9"' }}
+                                    <label for="username9">Email (Éste será el usuario con el que iniciará sesión)</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <span class="input-group-addon"><i class="fa fa-unlock-alt" aria-hidden="true"></i>
+                                </span>
+                                <div class="input-group-content">
+                                    {{ ucform.password }}
+
+                                    {{ ucform.password1|add:'class="form-control" id="username9"' }}
+                                    <label for="username9">Contraseña</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <span class="input-group-addon"><i class="fa fa-unlock-alt" aria-hidden="true"></i>
+                                </span>
+                                <div class="input-group-content">
+                                    {{ ucform.password2|add:'class="form-control" id="username9"' }}
+                                    <label for="username9">Repite contraseña</label>
+                                </div>
+                            </div>
+                         </div>
+                </div>
+            </div>
+        </div>

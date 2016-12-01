@@ -1,0 +1,114 @@
+
+{% load addform %}
+
+
+
+            <div class="form">
+                <div class="card">
+                   <div class="card-head style-primary-light">
+                            <header>Información de Padre | Representante <small> Detalles del usuario, padre o representante</small></header>
+                   </div>
+                            {{ ucform.errors }}
+                            {{ pform.errors }}
+                        <div class="card-body">
+
+
+                              <div class="form-group col-sm-2 style-primary-light">
+                                <div class="checkbox checkbox-styled">
+                                    <label>
+                                            {{ ucform.is_active  }}
+									    <span class="span_title"></span>
+								    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm-5">
+
+                                <span class="input-group-addon"><span class="glyphicon  fa-lg"><i class="fa fa-child" aria-hidden="true"></i>
+                                    </span></span>
+                                <div class="input-group-content">
+                                    {{ ucform.first_name|add:'class="form-control" id="username9"' }}
+                                    <label for="username9">Nombres</label>
+                                </div>
+
+                            </div>
+                            <div class="form-group col-sm-5">
+
+                                <span class="input-group-addon"><span class="glyphicon  fa-lg"><i class="fa fa-child" aria-hidden="true"></i>
+                                    </span></span>
+                                <div class="input-group-content">
+                                    {{ ucform.last_name|add:'class="form-control" id="username9"' }}
+                                    <label for="username9">Apellidos</label>
+                                </div>
+
+                            </div>
+    {% comment %}                        <div class="form-group">
+                                <span class="input-group-addon"><span class="glyphicon  fa-lg"><i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                                </span></span>
+                                <div class="input-group-content">
+                                    {{ ucform.email.as_hidden|add:'class="form-control" id="username9"' }}
+                                    <label for="username9">Correo</label>
+                                </div>
+                            </div>{% endcomment %}
+                            {{ ucform.email.as_hidden|add:'class="form-control" id="username9"' }}
+			    <!--
+                            <div class="form-group">
+                                <span class="input-group-addon"><span class="glyphicon  fa-lg"><i class="fa fa-list-alt" aria-hidden="true"></i>
+                                    </span></span>
+                                <div class="input-group-content">
+                                    <label for="username9">Número de identificación</label>
+                                </div>
+                            </div>-->
+
+                            <div class="form-group">
+
+                                <span class="input-group-addon"><span class="glyphicon  fa-lg"><i class="fa fa-phone" aria-hidden="true"></i>
+                                    </span></span>
+                                <div class="input-group-content">
+                                    {{ pform.telefono|add:'class="form-control" id="username9"' }}
+                                    <label for="username9">Telefono</label>
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+
+                                <span class="input-group-addon"><span class="glyphicon  fa-lg"></span><i class="fa fa-building" aria-hidden="true"></i>
+                                    </span>
+                                <div class="input-group-content">
+                                    {{ pform.direccion|add:'class="form-control" id="username9"' }}
+                                    <label for="username9">Dirección</label>
+                                </div>
+
+                            </div>
+
+                            <div class=" text-right">
+                                <button class="btn btn-primary btn-raised" type="submit">Guardar</button>
+                            </div>
+			    <!--
+                            <div class="form-group">
+
+                                <span class="input-group-addon"><span class="glyphicon  fa-lg"></span><i class="fa fa-building" aria-hidden="true"></i>
+                                    </span>
+                                <div class="input-group-content">
+                                    {{ pform.facebook|add:'class="form-control" id="username9"' }}
+                                    <label for="username9">Facebook</label>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <span class="input-group-addon"><span class="glyphicon  fa-lg"></span><i class="fa fa-building" aria-hidden="true"></i>
+                                    </span>
+                                <div class="input-group-content">
+                                    {{ pform.twitter|add:'class="form-control" id="username9"' }}
+                                    <label for="username9">Twitter</label>
+                                </div>
+
+                            </div> -->
+
+                        </div>
+                </div>
+            </div>
+
+
